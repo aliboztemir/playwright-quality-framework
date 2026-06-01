@@ -9,18 +9,21 @@ on:
 jobs:
   ui-tests:
     runs-on: ubuntu-latest
-
-    # ─────────────────────────────────────────────────────────────
-    # NOTE: These tests target a live Odoo 17 eCommerce instance.
-    # To run in CI, provide the environment variables below via
-    # GitHub repository secrets (Settings → Secrets and variables).
-    # Without a running Odoo instance the tests will fail to connect.
-    # ─────────────────────────────────────────────────────────────
+    timeout-minutes: 45
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout test repo
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Checkout sandbox repo
+        uses: actions/checkout@v4
+        with:
+          repository: aliboztemir/odoo-ecommerce-sandbox
+          ref: ci/sandbox-bootstrap
+          path: .sandbox
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
@@ -31,18 +34,46 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Start Odoo sandbox
+        id: sandbox
+        uses: ./.sandbox/.github/actions/start-sandbox
+        with:
+          compose-file: docker-compose.ci.yml
+          host-port: "8069"
+          wait-timeout-seconds: "420"
+          working-directory: .sandbox
+
+      - name: Validate test environment
+        shell: bash
+        run: |
+          test -n "${ODOO_URL}" || (echo "ODOO_URL is required" && exit 1)
+          curl -fsS "${ODOO_URL}/web/login" > /dev/null
+          curl -fsS "${ODOO_URL}/web/signup" > /dev/null
+          curl -fsS "${ODOO_URL}/shop" > /dev/null
+        env:
+          ODOO_URL: ${{ steps.sandbox.outputs.base-url }}
+
       - name: Run smoke tests
         run: npm run test:smoke -- --project=chromium
         env:
-          ODOO_URL:           ${{ secrets.ODOO_URL }}
-          ODOO_DB:            ${{ secrets.ODOO_DB }}
-          ODOO_ADMIN_EMAIL:   ${{ secrets.ODOO_ADMIN_EMAIL }}
-          ODOO_ADMIN_PASSWORD: ${{ secrets.ODOO_ADMIN_PASSWORD }}
-          PGHOST:             ${{ secrets.PGHOST }}
-          PGPORT:             ${{ secrets.PGPORT }}
-          PGDATABASE:         ${{ secrets.PGDATABASE }}
-          PGUSER:             ${{ secrets.PGUSER }}
-          PGPASSWORD:         ${{ secrets.PGPASSWORD }}
+          ODOO_URL: ${{ steps.sandbox.outputs.base-url }}
+          ODOO_DB: odoo
+          ODOO_ADMIN_EMAIL: admin
+          ODOO_ADMIN_PASSWORD: admin
+          PGHOST: 127.0.0.1
+          PGPORT: 5432
+          PGDATABASE: odoo
+          PGUSER: odoo
+          PGPASSWORD: odoo_password
+
+      - name: Dump sandbox logs on failure
+        if: failure()
+        working-directory: .sandbox
+        run: docker compose -f docker-compose.ci.yml logs --no-color
+
+      - name: Show docker state on failure
+        if: failure()
+        run: docker ps -a
 
       - name: Generate Allure report
         if: always()
@@ -61,3 +92,10 @@ jobs:
           name: playwright-report
           path: reports/html/
           retention-days: 7
+
+      - name: Stop Odoo sandbox
+        if: always()
+        uses: ./.sandbox/.github/actions/stop-sandbox
+        with:
+          compose-file: docker-compose.ci.yml
+          working-directory: .sandbox
