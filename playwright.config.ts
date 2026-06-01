@@ -7,10 +7,14 @@ export default defineConfig({
   forbidOnly: !!process.env['CI'],
   retries: process.env['CI'] ? 2 : 0,
   workers: process.env['CI'] ? 1 : undefined,
-  reporter: [['html', { outputFolder: 'reports/html' }], ['list']],
+  reporter: [
+    ['html', { outputFolder: 'reports/html' }],
+    ['list'],
+    ['allure-playwright', { outputFolder: 'allure-results', suiteTitle: false }],
+  ],
   use: {
     baseURL: environment.odooUrl,
-    headless: false,
+    headless: true,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'on-first-retry',

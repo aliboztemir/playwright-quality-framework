@@ -1,7 +1,9 @@
 import { test, expect } from '../../../src/fixtures/test';
+import { CustomerBuilder } from '../../../src/data/builders/CustomerBuilder';
 
 test('@ui @smoke @checkout demo payment method is visible on payment step', async ({ app }) => {
-  await app.auth.loginPage.login('', ''); // TODO: use registered test user
+  const customer = CustomerBuilder.random().build();
+  await app.auth.registerCustomer(customer);
   await app.catalog.openCatalog();
   await app.catalog.openFirstProduct();
   await app.catalog.productDetailsPage.addToCart();

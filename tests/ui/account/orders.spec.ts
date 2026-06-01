@@ -1,7 +1,9 @@
 import { test, expect } from '../../../src/fixtures/test';
+import { CustomerBuilder } from '../../../src/data/builders/CustomerBuilder';
 
 test('@ui @e2e @account completed order appears in your orders', async ({ app }) => {
-  await app.auth.loginPage.login('', ''); // TODO: use registered test user
+  const customer = CustomerBuilder.random().build();
+  await app.auth.registerCustomer(customer);
   await app.catalog.openCatalog();
   await app.catalog.openFirstProduct();
   await app.catalog.productDetailsPage.addToCart();

@@ -2,28 +2,62 @@ name: UI Tests
 
 on:
   push:
-    branches: [main]
+    branches: [main, master]
   pull_request:
-    branches: [main]
+    branches: [main, master]
 
 jobs:
   ui-tests:
     runs-on: ubuntu-latest
+
+    # ─────────────────────────────────────────────────────────────
+    # NOTE: These tests target a live Odoo 17 eCommerce instance.
+    # To run in CI, provide the environment variables below via
+    # GitHub repository secrets (Settings → Secrets and variables).
+    # Without a running Odoo instance the tests will fail to connect.
+    # ─────────────────────────────────────────────────────────────
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+
       - name: Install dependencies
         run: npm ci
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
+
       - name: Run smoke tests
-        run: npm run test:smoke
+        run: npm run test:smoke -- --project=chromium
         env:
-          BASE_URL: http://localhost:8069
+          ODOO_URL:           ${{ secrets.ODOO_URL }}
+          ODOO_DB:            ${{ secrets.ODOO_DB }}
+          ODOO_ADMIN_EMAIL:   ${{ secrets.ODOO_ADMIN_EMAIL }}
+          ODOO_ADMIN_PASSWORD: ${{ secrets.ODOO_ADMIN_PASSWORD }}
+          PGHOST:             ${{ secrets.PGHOST }}
+          PGPORT:             ${{ secrets.PGPORT }}
+          PGDATABASE:         ${{ secrets.PGDATABASE }}
+          PGUSER:             ${{ secrets.PGUSER }}
+          PGPASSWORD:         ${{ secrets.PGPASSWORD }}
+
+      - name: Generate Allure report
+        if: always()
+        run: npm run allure:generate
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-report
+          path: allure-report/
+          retention-days: 30
+
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: playwright-report
           path: reports/html/
+          retention-days: 7
