@@ -1,14 +1,14 @@
 import { test } from '@fixtures/test';
 
-test.describe('Catalog Filters', () => {
-  test('@ui @functional @catalog CAT-003 product search filters catalog results', async ({ app, productData }) => {
+test.describe('@catalog Catalog Filters', () => {
+  test('@CAT-003 @ui @functional @catalog product search filters catalog to matching results', async ({ app, productData }) => {
     const product = productData.getDefaultProduct();
     await app.catalog.openCatalog();
     await app.catalog.searchAndExpectResults(product.name);
     await app.catalog.expectSearchApplied(product.name);
   });
 
-  test('@ui @functional @catalog CAT-004 category filter displays products from selected category', async ({ app, productData }) => {
+  test('@CAT-004 @ui @functional @catalog category filter shows products from the selected category', async ({ app, productData }) => {
     await app.catalog.openCatalog();
     const category = await app.catalog.getFirstAvailableCategory();
     await app.catalog.filterByCategory(category);

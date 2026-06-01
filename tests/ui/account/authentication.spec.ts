@@ -1,8 +1,8 @@
 import { test } from '@fixtures/test';
 import { CustomerBuilder } from '@data/builders/CustomerBuilder';
 
-test.describe('Authentication', () => {
-  test('@ui @smoke @auth AUTH-001 customer can register, logout and login again', async ({ app }) => {
+test.describe('@auth Authentication', () => {
+  test('@AUTH-001 @ui @smoke @auth registers, logs out, and logs back in successfully', async ({ app }) => {
     const customer = CustomerBuilder.random().build();
 
     await app.auth.registerCustomer(customer);
@@ -18,7 +18,7 @@ test.describe('Authentication', () => {
     await app.auth.expectAuthenticatedAs(customer.name);
   });
 
-  test('@ui @negative @auth AUTH-002 invalid password shows login error', async ({ app }) => {
+  test('@AUTH-002 @ui @negative @auth invalid password is rejected at login', async ({ app }) => {
     const customer = CustomerBuilder.random().build();
 
     await app.auth.registerCustomer(customer);

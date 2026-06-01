@@ -1,8 +1,8 @@
 import { test, expect } from '@fixtures/test';
 import { CustomerBuilder } from '@data/builders/CustomerBuilder';
 
-test.describe('Authentication — Negative Cases', () => {
-  test('@ui @negative @auth AUTH-003 login with non-existent email shows error', async ({ app }) => {
+test.describe('@auth Authentication — Negative', () => {
+  test('@AUTH-003 @ui @negative @auth login with unknown email is rejected', async ({ app }) => {
     await app.auth.loginPage.open();
     await app.auth.loginPage.login('nonexistent_user_xyz@example.com', 'Test1234!');
 
@@ -10,7 +10,7 @@ test.describe('Authentication — Negative Cases', () => {
     await app.auth.expectAnonymous();
   });
 
-  test('@ui @negative @auth AUTH-004 login with empty password shows error', async ({ app }) => {
+  test('@AUTH-004 @ui @negative @auth login with empty password is rejected', async ({ app }) => {
     const customer = CustomerBuilder.random().build();
     await app.auth.registerCustomer(customer);
     await app.auth.logout();
@@ -22,7 +22,7 @@ test.describe('Authentication — Negative Cases', () => {
     await app.auth.expectAnonymous();
   });
 
-  test('@ui @negative @auth AUTH-005 duplicate registration with same email shows error', async ({ app }) => {
+  test('@AUTH-005 @ui @negative @auth duplicate email registration is rejected', async ({ app }) => {
     const customer = CustomerBuilder.random().build();
 
     // First registration should succeed
@@ -41,7 +41,7 @@ test.describe('Authentication — Negative Cases', () => {
     await app.auth.registerPage.expectRegistrationError();
   });
 
-  test('@ui @negative @auth AUTH-006 login with empty credentials stays on login page', async ({ app }) => {
+  test('@AUTH-006 @ui @negative @auth submitting empty credentials stays on login page', async ({ app }) => {
     await app.auth.loginPage.open();
     await app.auth.loginPage.emailInput.fill('');
     await app.auth.loginPage.passwordInput.fill('');

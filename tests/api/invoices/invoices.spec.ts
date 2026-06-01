@@ -1,8 +1,8 @@
 import { test, expect } from '@fixtures/test';
 import { InvoiceListService } from '@modules/invoices/services/InvoiceListService';
 
-test.describe('Invoices API', () => {
-  test('@api @functional @invoices customer invoices can be queried and have valid state', async ({ httpClient }) => {
+test.describe('@invoices Invoices API', () => {
+  test('@API-INV-001 @api @functional @invoices customer invoices have valid structure and state', async ({ httpClient }) => {
     const service  = new InvoiceListService(httpClient);
     const invoices = await service.findCustomerInvoices(20);
 

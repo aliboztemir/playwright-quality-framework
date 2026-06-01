@@ -1,8 +1,8 @@
 import { test, expect } from '@fixtures/test';
 import { PricelistService } from '@modules/checkout/services/PricelistService';
 
-test.describe('Pricelists API', () => {
-  test('@api @functional @pricelist EUR pricelist exists and uses EUR currency', async ({ httpClient }) => {
+test.describe('@pricelist Pricelists API', () => {
+  test('@API-PRC-001 @api @functional @pricelist EUR pricelist exists with correct currency', async ({ httpClient }) => {
     const service   = new PricelistService(httpClient);
     const pricelist = await service.findByName('EUR');
 

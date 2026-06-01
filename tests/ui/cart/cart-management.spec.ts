@@ -1,7 +1,7 @@
 import { test, expect } from '@fixtures/test';
 import { CustomerBuilder } from '@data/builders/CustomerBuilder';
 
-test.describe('Cart Management', () => {
+test.describe('@cart Cart Management', () => {
   let registeredEmail = '';
   let registeredPassword = '';
 
@@ -16,7 +16,7 @@ test.describe('Cart Management', () => {
     }
   });
 
-  test('@ui @functional @cart CART-001 Added product is displayed in cart', async ({ app, productData }) => {
+  test('@CART-001 @ui @functional @cart added product appears in cart with correct details', async ({ app, productData }) => {
     const product = productData.getProductInCategory('Boxes');
     await app.catalog.searchAndOpenProduct(product.name);
     await app.catalog.productDetailsPage.addToCart();
@@ -24,7 +24,7 @@ test.describe('Cart Management', () => {
     await app.cart.expectCartLineDetails(product.name, 1, product.price, true);
   });
 
-  test('@ui @functional @cart CART-002 Product quantity update recalculates cart total', async ({ app, productData }) => {
+  test('@CART-002 @ui @functional @cart quantity update recalculates cart total', async ({ app, productData }) => {
     const product = productData.getProductInCategory('Boxes');
     await app.catalog.searchAndOpenProduct(product.name);
     await app.catalog.productDetailsPage.addToCart();
@@ -34,7 +34,7 @@ test.describe('Cart Management', () => {
     await app.cart.expectCartLineDetails(product.name, 2, product.price*2, true);
   });
 
-  test('@ui @functional @cart CART-003 Product can be removed from cart', async ({ app, productData }) => {
+  test('@CART-003 @ui @functional @cart product removal empties the cart', async ({ app, productData }) => {
     const product = productData.getProductInCategory('Boxes');
     await app.catalog.searchAndOpenProduct(product.name);
     await app.catalog.productDetailsPage.addToCart();

@@ -1,8 +1,8 @@
 import { test, expect } from '@fixtures/test';
 import { environment } from '@config/environment';
 
-test.describe('API — Negative Cases', () => {
-  test('@api @negative @catalog products query with impossible filter returns empty array', async ({ httpClient }) => {
+test.describe('@negative API Negative Cases', () => {
+  test('@API-NEG-001 @api @negative @catalog impossible product filter returns empty result', async ({ httpClient }) => {
     const results = await httpClient.searchRead(
       'product.template',
       [['name', '=', 'XYZZY_NONEXISTENT_PRODUCT_99999_ABC']],
@@ -13,7 +13,7 @@ test.describe('API — Negative Cases', () => {
     expect(results).toHaveLength(0);
   });
 
-  test('@api @negative @catalog products with negative list_price are not in purchasable set', async ({ httpClient }) => {
+  test('@API-NEG-002 @api @negative @catalog published products cannot have a negative price', async ({ httpClient }) => {
     const negativePrice = await httpClient.searchRead(
       'product.template',
       [['list_price', '<', 0], ['website_published', '=', true]],
@@ -25,7 +25,7 @@ test.describe('API — Negative Cases', () => {
     expect(negativePrice).toHaveLength(0);
   });
 
-  test('@api @negative @orders query for non-existent order reference returns empty', async ({ httpClient }) => {
+  test('@API-NEG-003 @api @negative @orders non-existent order reference returns empty result', async ({ httpClient }) => {
     const orders = await httpClient.searchRead(
       'sale.order',
       [['name', '=', 'S/NONEXISTENT/99999']],
@@ -36,7 +36,7 @@ test.describe('API — Negative Cases', () => {
     expect(orders).toHaveLength(0);
   });
 
-  test('@api @negative @account non-admin login attempt via JSON-RPC returns error', async () => {
+  test('@API-NEG-004 @api @negative @account invalid credentials return authentication failure', async () => {
     const url = `${environment.odooUrl}/web/session/authenticate`;
 
     const response = await fetch(url, {

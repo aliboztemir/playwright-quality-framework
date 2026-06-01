@@ -1,8 +1,8 @@
 import { test, expect } from '@fixtures/test';
 import { SalesOrderLineService } from '@modules/checkout/services/SalesOrderLineService';
 
-test.describe('Sales Orders API', () => {
-  test('@api @functional @checkout sales order can be found by reference', async ({ httpClient }) => {
+test.describe('@checkout Sales Orders API', () => {
+  test('@API-ORD-001 @api @functional @checkout confirmed sale order can be found by reference', async ({ httpClient }) => {
     const orders = await httpClient.searchRead(
       'sale.order',
       [['state', '=', 'sale']],
@@ -14,22 +14,22 @@ test.describe('Sales Orders API', () => {
     expect(orders[0]['name']).toMatch(/^S\d+/);
   });
 
-  test('@api @functional @checkout confirmed sale orders have amount_total > 0', async ({ httpClient }) => {
-    const raw = await httpClient.searchRead(
+  test('@API-ORD-002 @api @functional @checkout confirmed sale orders have a positive total amount', async ({ httpClient }) => {
+    const orders = await httpClient.searchRead(
       'sale.order',
       [['state', '=', 'sale']],
       ['id', 'name', 'state', 'amount_total'],
       10,
     );
 
-    expect(raw.length).toBeGreaterThan(0);
-    for (const order of raw) {
+    expect(orders.length).toBeGreaterThan(0);
+    for (const order of orders) {
       expect(order['amount_total']).toBeGreaterThan(0);
       expect(order['state']).toBe('sale');
     }
   });
 
-  test('@api @functional @checkout sale order lines have valid product, qty and price', async ({ httpClient }) => {
+  test('@API-ORD-003 @api @functional @checkout sale order lines have valid product, quantity and price', async ({ httpClient }) => {
     const orders = await httpClient.searchRead(
       'sale.order',
       [['state', '=', 'sale']],

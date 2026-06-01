@@ -1,8 +1,8 @@
 import { test, expect } from '@fixtures/test';
 import { CustomerBuilder } from '@data/builders/CustomerBuilder';
 
-test.describe('Checkout Address', () => {
-  test('@ui @functional @checkout delivery address step is visible', async ({ app }) => {
+test.describe('@checkout Checkout Address', () => {
+  test('@CHK-ADDR-001 @ui @functional @checkout address confirmation step is visible', async ({ app }) => {
     const customer = CustomerBuilder.random().build();
     await app.auth.registerCustomer(customer);
     await app.catalog.openCatalog();

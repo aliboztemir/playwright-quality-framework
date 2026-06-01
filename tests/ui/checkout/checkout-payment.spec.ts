@@ -1,8 +1,8 @@
 import { test, expect } from '@fixtures/test';
 import { CustomerBuilder } from '@data/builders/CustomerBuilder';
 
-test.describe('Checkout Payment', () => {
-  test('@ui @smoke @checkout demo payment method is visible on payment step', async ({ app }) => {
+test.describe('@checkout Checkout Payment', () => {
+  test('@CHK-PAY-001 @ui @smoke @checkout demo payment method is available at payment step', async ({ app }) => {
     const customer = CustomerBuilder.random().build();
     await app.auth.registerCustomer(customer);
     await app.catalog.openCatalog();

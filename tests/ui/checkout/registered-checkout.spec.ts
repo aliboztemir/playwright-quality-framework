@@ -2,8 +2,8 @@ import { test, expect } from '@fixtures/test';
 import { CustomerBuilder } from '@data/builders/CustomerBuilder';
 import { knownProducts } from '@data/testData/products';
 
-test.describe('Registered Checkout', () => {
-  test('@ui @e2e @checkout registered customer can complete payment with demo provider', async ({ app }) => {
+test.describe('@checkout Registered Checkout', () => {
+  test('@CHK-REG-001 @ui @e2e @checkout completes payment with demo provider', async ({ app }) => {
     const customer = CustomerBuilder.random().build();
     await app.auth.registerCustomer(customer);
     await app.catalog.openCatalog();

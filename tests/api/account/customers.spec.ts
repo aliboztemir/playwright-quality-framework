@@ -1,7 +1,7 @@
 import { test, expect } from '@fixtures/test';
 
-test.describe('Customers API', () => {
-  test('@api @smoke @account admin user exists and has system access', async ({ httpClient }) => {
+test.describe('@account Customers API', () => {
+  test('@API-USR-001 @api @smoke @account admin user exists as an internal system user', async ({ httpClient }) => {
     const users = await httpClient.searchRead(
       'res.users',
       [['login', '=', 'admin']],
@@ -15,7 +15,7 @@ test.describe('Customers API', () => {
     expect(admin['share']).toBe(false); // internal user, not portal
   });
 
-  test('@api @functional @account portal users have share flag set to true', async ({ httpClient }) => {
+  test('@API-USR-002 @api @functional @account portal users are identified by the share flag', async ({ httpClient }) => {
     const portalUsers = await httpClient.searchRead(
       'res.users',
       [['share', '=', true]],
@@ -29,7 +29,7 @@ test.describe('Customers API', () => {
     }
   });
 
-  test('@api @functional @account res.partner records exist for registered users', async ({ httpClient }) => {
+  test('@API-USR-003 @api @functional @account customer partner records exist for registered users', async ({ httpClient }) => {
     const partners = await httpClient.searchRead(
       'res.partner',
       [['customer_rank', '>', 0]],

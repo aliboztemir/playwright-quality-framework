@@ -1,8 +1,8 @@
 import { test, expect } from '@fixtures/test';
 import { knownProducts } from '@data/testData/products';
 
-test.describe('Product Search', () => {
-  test('@ui @functional @catalog CAT-005 searching a known product returns relevant results', async ({ app, page }) => {
+test.describe('@catalog Product Search', () => {
+  test('@CAT-005 @ui @functional @catalog searching a known keyword returns relevant results', async ({ app, page }) => {
     await app.catalog.openCatalog();
     await app.catalog.catalogPage.search(knownProducts.simpleOrderPolicy.keyword);
 
@@ -12,7 +12,7 @@ test.describe('Product Search', () => {
     await app.catalog.expectProductVisible(knownProducts.simpleOrderPolicy.name);
   });
 
-  test('@ui @functional @catalog CAT-006 searching a non-existent term shows no products', async ({ app, page }) => {
+  test('@CAT-006 @ui @functional @catalog searching a non-existent term shows no results', async ({ app, page }) => {
     await app.catalog.openCatalog();
     await app.catalog.catalogPage.search('xyzzy_nonexistent_product_99999');
 
@@ -21,9 +21,8 @@ test.describe('Product Search', () => {
     expect(count).toBe(0);
   });
 
-  test('@ui @functional @catalog CAT-007 search is case-insensitive and partial match works', async ({ app }) => {
+  test('@CAT-007 @ui @functional @catalog search supports partial and case-insensitive matching', async ({ app }) => {
     await app.catalog.openCatalog();
-    // Search with lowercase partial keyword
     await app.catalog.catalogPage.search('desk');
 
     const count = await app.catalog.catalogPage.getProductCount();

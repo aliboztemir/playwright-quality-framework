@@ -1,8 +1,8 @@
-import { test, expect } from '@fixtures/test';
+import { test } from '@fixtures/test';
 import { CustomerBuilder } from '@data/builders/CustomerBuilder';
 
-test.describe('Orders Portal', () => {
-  test('@ui @e2e @account completed order appears in your orders', async ({ app }) => {
+test.describe('@account Orders Portal', () => {
+  test('@ORD-001 @ui @e2e @account completed order is visible in the orders portal', async ({ app }) => {
     const customer = CustomerBuilder.random().build();
     await app.auth.registerCustomer(customer);
     await app.catalog.openCatalog();
