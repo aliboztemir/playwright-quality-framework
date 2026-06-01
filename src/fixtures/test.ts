@@ -13,6 +13,7 @@ import { ProductTestDataService } from '../modules/catalog/services/ProductTestD
 import { OrderVerificationFlow } from '../modules/orders/flows/OrderVerificationFlow';
 import { InvoiceVerificationFlow } from '../modules/invoices/flows/InvoiceVerificationFlow';
 import { OdooModelClient } from '../framework/api/OdooModelClient';
+import { OdooJsonRpcClient } from '../framework/api/OdooJsonRpcClient';
 import { getPool } from '../framework/db/PostgresClient';
 import { environment } from '../config/environment';
 
@@ -40,6 +41,7 @@ type Fixtures = {
 type WorkerFixtures = {
   productData: ProductTestDataService;
   apiClient:   OdooModelClient;
+  httpClient:  OdooJsonRpcClient;
 };
 
 export const test = base.extend<Fixtures, WorkerFixtures>({
@@ -60,6 +62,14 @@ export const test = base.extend<Fixtures, WorkerFixtures>({
         environment.adminEmail,
         environment.adminPassword,
       );
+      await use(client);
+    },
+    { scope: 'worker' },
+  ],
+
+  httpClient: [
+    async ({}, use) => {
+      const client = await OdooJsonRpcClient.fromEnvironment();
       await use(client);
     },
     { scope: 'worker' },
