@@ -1,5 +1,5 @@
-import { test, expect } from '../../../src/fixtures/test';
-import { CustomerBuilder } from '../../../src/data/builders/CustomerBuilder';
+import { test, expect } from '@fixtures/test';
+import { CustomerBuilder } from '@data/builders/CustomerBuilder';
 
 test.describe('Authentication — Negative Cases', () => {
   test('@ui @negative @auth AUTH-003 login with non-existent email shows error', async ({ app }) => {

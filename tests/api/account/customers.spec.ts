@@ -1,4 +1,4 @@
-import { test, expect } from '../../../src/fixtures/test';
+import { test, expect } from '@fixtures/test';
 
 test.describe('Customers API', () => {
   test('@api @smoke @account admin user exists and has system access', async ({ httpClient }) => {

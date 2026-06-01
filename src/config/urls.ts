@@ -6,6 +6,7 @@ export const urls = {
   base,
   shop:     `${base}/shop`,
   login:    `${base}/web/login`,
+  logout:   `${base}/web/session/logout`,
   account:  `${base}/my/account`,
   home:     `${base}/my/home`,
   orders:   `${base}/my/orders`,

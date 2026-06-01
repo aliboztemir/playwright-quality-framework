@@ -1,6 +1,6 @@
-import { test, expect } from '../../../src/fixtures/test';
-import { CustomerBuilder } from '../../../src/data/builders/CustomerBuilder';
-import { knownProducts } from '../../../src/data/testData/products';
+import { test, expect } from '@fixtures/test';
+import { CustomerBuilder } from '@data/builders/CustomerBuilder';
+import { knownProducts } from '@data/testData/products';
 
 /**
  * CHK-E2E-001 | Registered customer completes checkout and verifies order/invoice
@@ -72,7 +72,7 @@ test(
     expect(result.customerEmail).toBe(guestEmail);
 
     // After guest checkout, sign up with same email
-    const signupLink = app.checkout.address['page'].getByRole('link', { name: /sign up|create account/i });
+    const signupLink = app.checkout.address.getPage().getByRole('link', { name: /sign up|create account/i });
     const hasSignup  = await signupLink.isVisible().catch(() => false);
     if (hasSignup) {
       await signupLink.click();

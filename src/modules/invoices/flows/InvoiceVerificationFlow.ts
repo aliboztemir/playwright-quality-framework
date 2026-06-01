@@ -3,6 +3,7 @@ import type { Pool } from 'pg';
 import { InvoicesPage } from '../../account/pages/InvoicesPage';
 import { InvoiceRepository } from '../repositories/InvoiceRepository';
 import { InvoiceApiService } from '../services/InvoiceApiService';
+import { urls } from '../../../config/urls';
 import type { OdooModelClient } from '../../../framework/api/OdooModelClient';
 import type { CheckoutResult } from '../../checkout/flows/CheckoutFlow';
 
@@ -37,7 +38,7 @@ export class InvoiceVerificationFlow {
   }
 
   private async verifyInPortal(result: CheckoutResult, invoiceName: string): Promise<void> {
-    await this.page.goto('/my/invoices');
+    await this.page.goto(urls.invoices);
     await this.invoicesPage.expectInvoiceVisible(invoiceName);
   }
 

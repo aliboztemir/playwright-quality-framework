@@ -1,4 +1,4 @@
-import { test, expect } from '@fixtures/test';
+import { test } from '@fixtures/test';
 
 test.describe('Catalog Filters', () => {
   test('@ui @functional @catalog CAT-003 product search filters catalog results', async ({ app, productData }) => {

@@ -1,5 +1,5 @@
-import { test, expect } from '../../../src/fixtures/test';
-import { knownProducts } from '../../../src/data/testData/products';
+import { test, expect } from '@fixtures/test';
+import { knownProducts } from '@data/testData/products';
 
 test.describe('Catalog', () => {
   test('@ui @smoke @catalog CAT-001 product catalog displays available products', async ({ app }) => {

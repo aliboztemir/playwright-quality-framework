@@ -1,4 +1,5 @@
-import { test, expect } from '../../../src/fixtures/test';
+import { test, expect } from '@fixtures/test';
+import { environment } from '@config/environment';
 
 test.describe('API — Negative Cases', () => {
   test('@api @negative @catalog products query with impossible filter returns empty array', async ({ httpClient }) => {
@@ -36,7 +37,6 @@ test.describe('API — Negative Cases', () => {
   });
 
   test('@api @negative @account non-admin login attempt via JSON-RPC returns error', async () => {
-    const { environment } = await import('../../../src/config/environment');
     const url = `${environment.odooUrl}/web/session/authenticate`;
 
     const response = await fetch(url, {

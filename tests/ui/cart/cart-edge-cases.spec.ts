@@ -1,5 +1,5 @@
-import { test, expect } from '../../../src/fixtures/test';
-import { CustomerBuilder } from '../../../src/data/builders/CustomerBuilder';
+import { test, expect } from '@fixtures/test';
+import { CustomerBuilder } from '@data/builders/CustomerBuilder';
 
 test.describe('Cart — Edge Cases', () => {
   test('@ui @negative @cart CART-004 empty cart page shows empty state message', async ({ app }) => {

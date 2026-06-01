@@ -1,5 +1,6 @@
 import { type Page, type Locator, expect } from '@playwright/test';
 import { BasePage } from '../../../framework/core/BasePage';
+import type { CartLine } from '../../checkout/models/CartLine';
 
 export class CartPage extends BasePage {
   readonly path = '/shop/cart';
@@ -22,9 +23,9 @@ export class CartPage extends BasePage {
     });
   }
 
-  async captureCartLines(): Promise<import('../../checkout/models/CartLine').CartLine[]> {
+  async captureCartLines(): Promise<CartLine[]> {
     const count = await this.cartLines.count();
-    const lines: import('../../checkout/models/CartLine').CartLine[] = [];
+    const lines: CartLine[] = [];
     for (let i = 0; i < count; i++) {
       const line = this.cartLines.nth(i);
       const name = await line

@@ -3,6 +3,7 @@ import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
 import { Header } from '../../shared/components/Header';
 import { adminCredentials } from '../../../config/credentials';
+import { urls } from '../../../config/urls';
 import type { Customer } from '../models/Customer';
 
 export class AuthFlow {
@@ -29,7 +30,7 @@ export class AuthFlow {
   }
 
   async logout(): Promise<void> {
-    await this.page.goto('/web/session/logout');
+    await this.page.goto(urls.logout);
     await this.page.waitForLoadState('domcontentloaded');
   }
 
