@@ -46,4 +46,24 @@ export class AuthFlow {
   async expectLoginError(): Promise<void> {
     await this.loginPage.expectLoginError();
   }
+
+  /**
+   * After a guest checkout, attempts to sign the guest up with the same email.
+   * Odoo may show a signup link on the confirmation page; if not, falls back to
+   * direct registration. If the account already exists (created implicitly by
+   * the checkout), falls back to login instead.
+   */
+  async signUpAfterGuestCheckout(name: string, email: string, password: string): Promise<void> {
+    const signupLink = this.page.getByRole('link', { name: /sign up|create account/i });
+    const hasSignup  = await signupLink.isVisible().catch(() => false);
+    if (hasSignup) {
+      await signupLink.click();
+      await this.registerPage.register(name, email, password);
+    } else {
+      await this.registerPage.register(name, email, password).catch(() => {
+        // May already exist from guest checkout — try login instead
+      });
+      await this.login(email, password);
+    }
+  }
 }

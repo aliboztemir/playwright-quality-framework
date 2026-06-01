@@ -69,6 +69,13 @@ export class CartPage extends BasePage {
     await this.page.waitForLoadState('networkidle');
   }
 
+  async removeAllItems(): Promise<void> {
+    const count = await this.cartLines.count();
+    for (let i = 0; i < count; i++) {
+      await this.removeLine(0);
+    }
+  }
+
   async proceedToCheckout(): Promise<void> {
     await this.checkoutButton.click();
     await this.waitForReady();

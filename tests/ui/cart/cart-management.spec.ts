@@ -2,18 +2,9 @@ import { test, expect } from '@fixtures/test';
 import { CustomerBuilder } from '@data/builders/CustomerBuilder';
 
 test.describe('@cart Cart Management', () => {
-  let registeredEmail = '';
-  let registeredPassword = '';
-
   test.beforeEach(async ({ app }) => {
-    if (!registeredEmail) {
-      const customer = CustomerBuilder.random().build();
-      registeredEmail = customer.email;
-      registeredPassword = customer.password;
-      await app.auth.registerCustomer(customer);
-    } else {
-      await app.auth.login(registeredEmail, registeredPassword);
-    }
+    const customer = CustomerBuilder.random().build();
+    await app.auth.registerCustomer(customer);
   });
 
   test('@CART-001 @ui @functional @cart added product appears in cart with correct details', async ({ app, productData }) => {

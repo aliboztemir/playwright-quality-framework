@@ -32,9 +32,7 @@ test.describe('@cart Cart Edge Cases', () => {
       const lineCount = await app.cart.cartPage.getLineCount();
       expect(lineCount).toBeGreaterThan(0);
 
-      for (let i = 0; i < lineCount; i++) {
-        await app.cart.cartPage.removeLine(0);
-      }
+      await app.cart.cartPage.removeAllItems();
 
       await app.cart.cartPage.expectCartEmpty();
     });

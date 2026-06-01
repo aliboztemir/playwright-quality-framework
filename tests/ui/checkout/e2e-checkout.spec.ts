@@ -54,19 +54,8 @@ test.describe('@checkout Checkout E2E', () => {
       expect(result.products.length).toBeGreaterThan(0);
       expect(result.customerEmail).toBe(guestEmail);
 
-      // After guest checkout, sign up with same email
-      const signupLink = app.checkout.address.getPage().getByRole('link', { name: /sign up|create account/i });
-      const hasSignup  = await signupLink.isVisible().catch(() => false);
-      if (hasSignup) {
-        await signupLink.click();
-        await app.auth.registerPage.register(guestName, guestEmail, 'Test1234!');
-      } else {
-        // Directly register and login with guest email
-        await app.auth.registerPage.register(guestName, guestEmail, 'Test1234!').catch(() => {
-          // May already exist from guest checkout — try login instead
-        });
-        await app.auth.login(guestEmail, 'Test1234!');
-      }
+      // After guest checkout, Odoo may prompt for account creation with the same email
+      await app.auth.signUpAfterGuestCheckout(guestName, guestEmail, 'Test1234!');
 
       // API and DB verification (no portal verification since auth state is uncertain)
       await orderVerification.verifyViaApi(result);
