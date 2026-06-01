@@ -1,0 +1,10 @@
+node_modules/
+dist/
+reports/
+test-results/
+.env
+playwright-report/
+*.env.local
+tmp_*.js
+frameworktree.md
+frameworkAnaMimariStandart.md
